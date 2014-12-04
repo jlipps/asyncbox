@@ -1,7 +1,13 @@
 asyncbox
 ========
 
-A collection of ES7 async/await utilities. Behold:
+A collection of ES7 async/await utilities. Install via NPM:
+
+```
+npm install asyncbox
+```
+
+Then, behold!
 
 ### Sleep
 
@@ -39,4 +45,10 @@ async function myFn () {
     // if it doesn't, we'll get the error thrown in this context
     let randSum = await retry(3, flakeyFunction, ...randVals);
 }
+```
+
+### Run the tests
+
+```
+npm test
 ```
