@@ -1,0 +1,51 @@
+{
+  "name": "asyncbox",
+  "description": "A collection of small async/await utilities",
+  "tags": [
+    "async/await",
+    "es7",
+    "async"
+  ],
+  "version": "1.0.0",
+  "author": "jlipps@gmail.com",
+  "licenses": [
+    {
+      "type": "apache-2.0",
+      "url": "https://raw.github.com/jlipps/asyncbox/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jlipps/asyncbox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jlipps/asyncbox/issues"
+  },
+  "engines": [
+    "node"
+  ],
+  "main": "./lib/es5/main.js",
+  "bin": { },
+  "directories": {
+    "lib": "./lib/es6"
+  },
+  "dependencies": {
+    "traceur": "0.0.74",
+    "q": "^1.0.1",
+    "source-map-support": "^0.2.8"
+  },
+  "scripts": {
+    "test": "$(npm bin)/gulp && $(npm bin)/mocha test/es5/specs.js"
+  },
+  "devDependencies": {
+    "gulp-traceur": "^0.13.0",
+    "gulp": "^3.8.9",
+    "request": "^2.47.0",
+    "mochawait": "^1.1.0",
+    "merge-stream": "^0.1.6",
+    "mocha": "^2.0.1",
+    "should": "^4.1.0",
+    "rtts-assert": "0.0.7",
+    "gulp-sourcemaps": "^1.2.8"
+  }
+}
