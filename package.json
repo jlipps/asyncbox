@@ -6,7 +6,7 @@
     "es7",
     "async"
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "jlipps@gmail.com",
   "licenses": [
     {
@@ -25,7 +25,7 @@
     "node"
   ],
   "main": "./lib/es5/main.js",
-  "bin": { },
+  "bin": {},
   "directories": {
     "lib": "./lib/es6"
   },
