@@ -103,10 +103,9 @@ describe('nodeify', () => {
   });
   regIt('should turn async functions into nodey things with mult params', done => {
     let start = Date.now();
-    nodeify(asyncFn2('foo'), (err, val, val2) => {
+    nodeify(asyncFn2('foo'), (err, val) => {
       should.not.exist(err);
-      val.should.equal('foo');
-      val2.should.equal('foofoo');
+      val.should.eql(['foo', 'foofoo']);
       (Date.now() - start).should.be.above(14);
       done();
     });
