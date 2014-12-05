@@ -32,7 +32,8 @@
   "dependencies": {
     "traceur": "0.0.74",
     "q": "^1.0.1",
-    "source-map-support": "^0.2.8"
+    "source-map-support": "^0.2.8",
+    "es6-mapify": "~1.0.0"
   },
   "scripts": {
     "test": "$(npm bin)/gulp && $(npm bin)/mocha test/es5/specs.js"

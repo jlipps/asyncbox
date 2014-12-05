@@ -3,7 +3,7 @@ import 'traceur/bin/traceur-runtime';
 let regIt = it;
 import 'mochawait';
 import should from 'should';
-import { sleep, retry, nodeify } from '../../lib/es5/main';
+import { sleep, retry, nodeify, nodeifyAll } from '../../lib/es5/main';
 
 describe('sleep', () => {
   it('should work like setTimeout', async () => {
@@ -78,7 +78,7 @@ describe('retry', () => {
   });
 });
 
-describe('nodeify', () => {
+describe('nodeifyAll', () => {
   let asyncFn = async (val) => {
     await sleep(15);
     return val;
@@ -91,9 +91,20 @@ describe('nodeify', () => {
     await sleep(15);
     throw new Error('boo');
   };
+  let cbMap = nodeifyAll({asyncFn, asyncFn2, badAsyncFn});
   regIt('should turn async functions into nodey things', done => {
     let start = Date.now();
     nodeify(asyncFn('foo'), (err, val, val2) => {
+      should.not.exist(err);
+      should.not.exist(val2);
+      val.should.equal('foo');
+      (Date.now() - start).should.be.above(14);
+      done();
+    });
+  });
+  regIt('should turn async functions into nodey things via nodeifyAll', done => {
+    let start = Date.now();
+    cbMap.asyncFn('foo', (err, val, val2) => {
       should.not.exist(err);
       should.not.exist(val2);
       val.should.equal('foo');
@@ -119,4 +130,19 @@ describe('nodeify', () => {
       done();
     });
   });
+});
+
+describe('nodeifyAll', () => {
+  let asyncFn = async (val) => {
+    await sleep(15);
+    return val;
+  };
+  let asyncFn2 = async (val) => {
+    await sleep(15);
+    return [val, val + val];
+  };
+  let badAsyncFn = async () => {
+    await sleep(15);
+    throw new Error('boo');
+  };
 });

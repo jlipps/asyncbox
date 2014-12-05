@@ -63,6 +63,28 @@ nodeify(sleep(1000), function (err, timer) {
 });
 ```
 
+### nodeifyAll
+
+If you have a whole library you want to export nodeified versions of, it's pretty easy:
+
+```js
+import { nodeifyAll } from 'asyncbox';
+
+async function foo () { ... }
+async function bar () { ... }
+let cb = nodeifyAll({foo, bar});
+export { foo, bar, cb };
+```
+
+Then in my ES5 script I can do:
+
+```js
+var myLib = require('mylib').cb;
+
+myLib.foo(function (err) { ... });
+myLib.bar(function (err) { ... });
+```
+
 ### Run the tests
 
 ```
