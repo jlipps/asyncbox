@@ -28,7 +28,7 @@ async function myFn () {
 An async/await way of running a method until it doesn't throw an error
 
 ```js
-import { retry } from 'asyncbox';
+import { sleep, retry } from 'asyncbox';
 
 async function flakeyFunction (val1, val2) {
     if (val1 < 10) {
@@ -45,6 +45,22 @@ async function myFn () {
     // if it doesn't, we'll get the error thrown in this context
     let randSum = await retry(3, flakeyFunction, ...randVals);
 }
+```
+
+### Nodeify
+
+Export async functions (Promises) and import this with your ES5 code to use it
+with Node.
+
+```js
+var asyncbox = require('asyncbox')
+  , sleep = asyncbox.sleep
+  , nodeify = asyncbox.nodeify;
+
+nodeify(sleep(1000), function (err, timer) {
+  console.log(err); // null
+  console.log(timer); // timer obj
+});
 ```
 
 ### Run the tests

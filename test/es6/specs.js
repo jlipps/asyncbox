@@ -1,8 +1,9 @@
 /* global describe:true, it:true */
 import 'traceur/bin/traceur-runtime';
+let regIt = it;
 import 'mochawait';
 import should from 'should';
-import { sleep, retry } from '../../lib/es5/main';
+import { sleep, retry, nodeify } from '../../lib/es5/main';
 
 describe('sleep', () => {
   it('should work like setTimeout', async () => {
@@ -65,7 +66,7 @@ describe('retry', () => {
     should.exist(err);
     err.message.should.equal('not ok yet');
     eventuallyOkFnCalls.should.equal(3);
-    (Date.now() - start).should.be.above(44);
+    (Date.now() - start).should.be.above(35);
 
     // rerun with ok number of calls
     start = Date.now();
@@ -73,6 +74,50 @@ describe('retry', () => {
     let res = await retry(3, eventuallyOkFn, 3);
     eventuallyOkFnCalls.should.equal(3);
     res.should.equal(9);
-    (Date.now() - start).should.be.above(44);
+    (Date.now() - start).should.be.above(35);
+  });
+});
+
+describe('nodeify', () => {
+  let asyncFn = async (val) => {
+    await sleep(15);
+    return val;
+  };
+  let asyncFn2 = async (val) => {
+    await sleep(15);
+    return [val, val + val];
+  };
+  let badAsyncFn = async () => {
+    await sleep(15);
+    throw new Error('boo');
+  };
+  regIt('should turn async functions into nodey things', done => {
+    let start = Date.now();
+    nodeify(asyncFn('foo'), (err, val, val2) => {
+      should.not.exist(err);
+      should.not.exist(val2);
+      val.should.equal('foo');
+      (Date.now() - start).should.be.above(14);
+      done();
+    });
+  });
+  regIt('should turn async functions into nodey things with mult params', done => {
+    let start = Date.now();
+    nodeify(asyncFn2('foo'), (err, val, val2) => {
+      should.not.exist(err);
+      val.should.equal('foo');
+      val2.should.equal('foofoo');
+      (Date.now() - start).should.be.above(14);
+      done();
+    });
+  });
+  regIt('should handle errors correctly', done => {
+    let start = Date.now();
+    nodeify(badAsyncFn('foo'), (err, val) => {
+      should.not.exist(val);
+      err.message.should.equal('boo');
+      (Date.now() - start).should.be.above(14);
+      done();
+    });
   });
 });
