@@ -47,6 +47,13 @@ async function myFn () {
 }
 ```
 
+You can also use `retryInterval` to add a sleep in between retries. This can be
+useful if you want to throttle how fast we retry:
+
+```js
+await retryInterval(3, 1500, expensiveFunction, ...args);
+```
+
 ### Nodeify
 
 Export async functions (Promises) and import this with your ES5 code to use it

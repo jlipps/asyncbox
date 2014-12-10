@@ -3,7 +3,7 @@ import 'traceur/bin/traceur-runtime';
 let regIt = it;
 import 'mochawait';
 import should from 'should';
-import { sleep, retry, nodeify, nodeifyAll } from '../../lib/es5/main';
+import { sleep, retry, retryInterval, nodeify, nodeifyAll } from '../../lib/es5/main';
 
 describe('sleep', () => {
   it('should work like setTimeout', async () => {
@@ -29,6 +29,13 @@ describe('retry', () => {
   let eventuallyOkFnCalls = 0;
   let eventuallyOkFn = async (times) => {
     await sleep(15);
+    eventuallyOkFnCalls++;
+    if (eventuallyOkFnCalls < times) {
+      throw new Error("not ok yet");
+    }
+    return times * times;
+  };
+  let eventuallyOkNoSleepFn = async (times) => {
     eventuallyOkFnCalls++;
     if (eventuallyOkFnCalls < times) {
       throw new Error("not ok yet");
@@ -75,6 +82,28 @@ describe('retry', () => {
     eventuallyOkFnCalls.should.equal(3);
     res.should.equal(9);
     (Date.now() - start).should.be.above(35);
+  });
+  it('in sleep mode, should return the correct value with a function that eventually passes', async () => {
+    eventuallyOkFnCalls = 0;
+    let err = null;
+    let start = Date.now();
+    try {
+      await retryInterval(3, 15, eventuallyOkNoSleepFn, 4);
+    } catch (e) {
+      err = e;
+    }
+    should.exist(err);
+    err.message.should.equal('not ok yet');
+    eventuallyOkFnCalls.should.equal(3);
+    (Date.now() - start).should.be.above(30);
+
+    // rerun with ok number of calls
+    start = Date.now();
+    eventuallyOkFnCalls = 0;
+    let res = await retryInterval(3, 15, eventuallyOkNoSleepFn, 3);
+    eventuallyOkFnCalls.should.equal(3);
+    res.should.equal(9);
+    (Date.now() - start).should.be.above(30);
   });
 });
 
