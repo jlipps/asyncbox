@@ -3,7 +3,8 @@ import 'traceur/bin/traceur-runtime';
 let regIt = it;
 import 'mochawait';
 import should from 'should';
-import { sleep, retry, retryInterval, nodeify, nodeifyAll } from '../../lib/es5/main';
+import { sleep, retry, retryInterval, nodeify, nodeifyAll,
+         parallel } from '../../lib/es5/main';
 
 describe('sleep', () => {
   it('should work like setTimeout', async () => {
@@ -174,4 +175,47 @@ describe('nodeifyAll', () => {
     await sleep(15);
     throw new Error('boo');
   };
+});
+
+describe('parallel', () => {
+  let asyncFn = async (val) => {
+    await sleep(30);
+    return val;
+  };
+  let badAsyncFn = async () => {
+    await sleep(15);
+    throw new Error("boo");
+  };
+  it('should perform tasks in parallel and return results', async () => {
+    let vals = [1, 2, 3];
+    let promises = [];
+    let start = Date.now();
+    for (let v of vals) {
+      promises.push(asyncFn(v));
+    }
+    let res = await parallel(promises);
+    (Date.now() - start).should.be.above(29);
+    (Date.now() - start).should.be.below(45);
+    res.sort().should.eql([1, 2, 3]);
+  });
+  it('should error with first response', async () => {
+    let vals = [1, 2, 3];
+    let promises = [];
+    let start = Date.now();
+    for (let v of vals) {
+      promises.push(asyncFn(v));
+    }
+    promises.push(badAsyncFn());
+    let err = null;
+    let res = [];
+    try {
+      res = await parallel(promises);
+    } catch (e) {
+      err = e;
+    }
+    (Date.now() - start).should.be.above(14);
+    (Date.now() - start).should.be.below(30);
+    should.exist(err);
+    res.should.eql([]);
+  });
 });
