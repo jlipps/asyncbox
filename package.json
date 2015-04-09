@@ -24,29 +24,27 @@
   "engines": [
     "node"
   ],
-  "main": "./lib/es5/main.js",
+  "main": "./build/lib/asyncbox.js",
   "bin": {},
   "directories": {
-    "lib": "./lib/es6"
+    "lib": "./lib"
   },
   "dependencies": {
-    "traceur": "0.0.74",
+    "babel-runtime": "^5.0.12",
+    "es6-mapify": "~1.0.0",
     "q": "^1.0.1",
-    "source-map-support": "^0.2.8",
-    "es6-mapify": "~1.0.0"
+    "source-map-support": "^0.2.10"
   },
   "scripts": {
-    "test": "$(npm bin)/gulp && $(npm bin)/mocha test/es5/specs.js"
+    "prepublish": "$(npm bin)/gulp prepublish",
+    "test": "$(npm bin)/gulp once",
+    "watch": "$(npm bin)/gulp"
   },
   "devDependencies": {
+    "appium-gulp-plugins": "^1.0.3",
     "gulp": "^3.8.11",
-    "gulp-sourcemaps": "^1.2.8",
-    "gulp-traceur": "^0.13.0",
-    "merge-stream": "^0.1.6",
-    "mocha": "^2.0.1",
     "mochawait": "^1.1.0",
     "request": "^2.47.0",
-    "rtts-assert": "0.0.7",
     "should": "^4.1.0"
   }
 }

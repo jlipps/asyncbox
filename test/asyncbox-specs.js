@@ -1,10 +1,9 @@
 /* global describe:true, it:true */
-import 'traceur/bin/traceur-runtime';
 let regIt = it;
 import 'mochawait';
 import should from 'should';
 import { sleep, retry, retryInterval, nodeify, nodeifyAll,
-         parallel } from '../../lib/es5/main';
+         parallel } from '../lib/asyncbox';
 
 describe('sleep', () => {
   it('should work like setTimeout', async () => {
@@ -162,20 +161,20 @@ describe('nodeifyAll', () => {
   });
 });
 
-describe('nodeifyAll', () => {
-  let asyncFn = async (val) => {
-    await sleep(15);
-    return val;
-  };
-  let asyncFn2 = async (val) => {
-    await sleep(15);
-    return [val, val + val];
-  };
-  let badAsyncFn = async () => {
-    await sleep(15);
-    throw new Error('boo');
-  };
-});
+//describe('nodeifyAll', () => {
+  //let asyncFn = async (val) => {
+    //await sleep(15);
+    //return val;
+  //};
+  //let asyncFn2 = async (val) => {
+    //await sleep(15);
+    //return [val, val + val];
+  //};
+  //let badAsyncFn = async () => {
+    //await sleep(15);
+    //throw new Error('boo');
+  //};
+//});
 
 describe('parallel', () => {
   let asyncFn = async (val) => {
