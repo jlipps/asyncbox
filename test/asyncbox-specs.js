@@ -1,3 +1,5 @@
+// transpile:mocha
+
 /* global describe:true, it:true */
 let regIt = it;
 import 'mochawait';
@@ -178,11 +180,11 @@ describe('nodeifyAll', () => {
 
 describe('parallel', () => {
   let asyncFn = async (val) => {
-    await sleep(30);
+    await sleep(50);
     return val;
   };
   let badAsyncFn = async () => {
-    await sleep(15);
+    await sleep(20);
     throw new Error("boo");
   };
   it('should perform tasks in parallel and return results', async () => {
@@ -193,8 +195,8 @@ describe('parallel', () => {
       promises.push(asyncFn(v));
     }
     let res = await parallel(promises);
-    (Date.now() - start).should.be.above(29);
-    (Date.now() - start).should.be.below(45);
+    (Date.now() - start).should.be.above(49);
+    (Date.now() - start).should.be.below(59);
     res.sort().should.eql([1, 2, 3]);
   });
   it('should error with first response', async () => {
@@ -212,8 +214,8 @@ describe('parallel', () => {
     } catch (e) {
       err = e;
     }
-    (Date.now() - start).should.be.above(14);
-    (Date.now() - start).should.be.below(30);
+    (Date.now() - start).should.be.above(19);
+    (Date.now() - start).should.be.below(49);
     should.exist(err);
     res.should.eql([]);
   });

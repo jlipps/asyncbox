@@ -43,8 +43,8 @@
   "devDependencies": {
     "appium-gulp-plugins": "^1.0.3",
     "gulp": "^3.8.11",
-    "mochawait": "^1.1.0",
+    "mochawait": "^2.0.0",
     "request": "^2.47.0",
-    "should": "^4.1.0"
+    "should": "^5.2.0"
   }
 }
