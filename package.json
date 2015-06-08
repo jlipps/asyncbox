@@ -30,10 +30,10 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "babel-runtime": "^5.0.12",
+    "babel-runtime": "^5.5.5",
     "es6-mapify": "~1.0.0",
     "q": "^1.0.1",
-    "source-map-support": "^0.2.10"
+    "source-map-support": "^0.3.1"
   },
   "scripts": {
     "prepublish": "$(npm bin)/gulp prepublish",
@@ -45,6 +45,6 @@
     "gulp": "^3.8.11",
     "mochawait": "^2.0.0",
     "request": "^2.47.0",
-    "should": "^5.2.0"
+    "should": "^6.0.3"
   }
 }
