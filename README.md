@@ -54,6 +54,31 @@ useful if you want to throttle how fast we retry:
 await retryInterval(3, 1500, expensiveFunction, ...args);
 ```
 
+### Filter/Map
+
+Filter and map are pretty handy concepts, and now you can write filter and map
+functions that execute asynchronously!
+
+```js
+import { asyncmap, asyncfilter } from 'asyncbox';
+```
+
+Then in your async functions, you can do:
+
+```js
+const items = [1, 2, 3, 4];
+const slowSquare = async (n) => { await sleep(5); return n * 2; };
+let newItems = await asyncmap(items, async (i) => { return await slowSquare(i); });
+console.log(newItems);  // [1, 4, 9, 16];
+
+const slowEven = async (n) => { await sleep(5); return n % 2 === 0; };
+newItems = await asyncfilter(items, async (i) => { return await slowEven(i); });
+console.log(newItems); // [2, 4];
+```
+
+By default, `asyncmap` and `asyncfilter` run their operations in parallel; you
+can pass `false` as a third argument to make sure it happens serially.
+
 ### Nodeify
 
 Export async functions (Promises) and import this with your ES5 code to use it

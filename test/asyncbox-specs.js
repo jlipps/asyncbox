@@ -5,7 +5,7 @@ let regIt = it;
 import 'mochawait';
 import should from 'should';
 import { sleep, retry, retryInterval, nodeify, nodeifyAll,
-         parallel } from '../lib/asyncbox';
+         parallel, asyncmap, asyncfilter } from '../lib/asyncbox';
 
 describe('sleep', () => {
   it('should work like setTimeout', async () => {
@@ -239,5 +239,41 @@ describe('parallel', () => {
       err = e;
     }
     should.exist(err);
+  });
+});
+
+describe('asyncmap', () => {
+  const mapper = async function (el) {
+    await sleep(5);
+    return el * 2;
+  };
+  const coll = [1, 2, 3];
+  it('should map elements one at a time', async () => {
+    let start = Date.now();
+    (await asyncmap(coll, mapper, false)).should.eql([2, 4, 6]);
+    (Date.now() - start).should.be.above(11);
+  });
+  it('should map elements in parallel', async () => {
+    let start = Date.now();
+    (await asyncmap(coll, mapper)).should.eql([2, 4, 6]);
+    (Date.now() - start).should.be.below(9);
+  });
+});
+
+describe('asyncfilter', () => {
+  const filter = async function (el) {
+    await sleep(5);
+    return el % 2 === 0;
+  };
+  const coll = [1, 2, 3, 4, 5];
+  it('should filter elements one at a time', async () => {
+    let start = Date.now();
+    (await asyncfilter(coll, filter, false)).should.eql([2, 4]);
+    (Date.now() - start).should.be.above(19);
+  });
+  it('should filter elements in parallel', async () => {
+    let start = Date.now();
+    (await asyncfilter(coll, filter)).should.eql([2, 4]);
+    (Date.now() - start).should.be.below(9);
   });
 });
