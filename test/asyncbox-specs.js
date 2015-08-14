@@ -222,12 +222,6 @@ describe('parallel', () => {
   it('should not allow parallelizing bad types of things', async () => {
     let err;
     try {
-      await parallel([]);
-    } catch (e) {
-      err = e;
-    }
-    should.exist(err);
-    try {
       await parallel('foo');
     } catch (e) {
       err = e;
@@ -258,6 +252,16 @@ describe('asyncmap', () => {
     (await asyncmap(coll, mapper)).should.eql([2, 4, 6]);
     (Date.now() - start).should.be.below(9);
   });
+  it('should handle an empty array', async () => {
+    let start = Date.now();
+    (await asyncmap([], mapper, false)).should.eql([]);
+    (Date.now() - start).should.be.below(9);
+  });
+  it('should handle an empty array in parallel', async () => {
+    let start = Date.now();
+    (await asyncmap([], mapper)).should.eql([]);
+    (Date.now() - start).should.be.below(9);
+  });
 });
 
 describe('asyncfilter', () => {
@@ -274,6 +278,16 @@ describe('asyncfilter', () => {
   it('should filter elements in parallel', async () => {
     let start = Date.now();
     (await asyncfilter(coll, filter)).should.eql([2, 4]);
+    (Date.now() - start).should.be.below(9);
+  });
+  it('should handle an empty array', async () => {
+    let start = Date.now();
+    (await asyncfilter([], filter, false)).should.eql([]);
+    (Date.now() - start).should.be.below(9);
+  });
+  it('should handle an empty array in parallel', async () => {
+    let start = Date.now();
+    (await asyncfilter([], filter)).should.eql([]);
     (Date.now() - start).should.be.below(9);
   });
 });
