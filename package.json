@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "babel-runtime": "=5.8.20",
+    "chai": "^3.2.0",
     "es6-mapify": "^1.0.0",
     "source-map-support": "^0.3.1"
   },

@@ -3,9 +3,11 @@
 /* global describe:true, it:true */
 let regIt = it;
 import 'mochawait';
-import should from 'should';
+import chai from 'chai';
 import { sleep, retry, retryInterval, nodeify, nodeifyAll,
          parallel, asyncmap, asyncfilter } from '../lib/asyncbox';
+
+let should = chai.should();
 
 describe('sleep', () => {
   it('should work like setTimeout', async () => {
