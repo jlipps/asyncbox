@@ -117,6 +117,37 @@ myLib.foo(function (err) { ... });
 myLib.bar(function (err) { ... });
 ```
 
+### waitForCondition
+
+Takes a condition (a function returning a boolean or boolean promise),
+and waits until the condition is true.
+
+Throws a `/Condition unmet/` error if the condition has not been
+satisfied within the allocated time.
+
+The default options are: `{ waitMs: 5000, intervalMs: 500 }`
+
+```js
+// define your own condition
+function condFn () { return Math.random()*1000 > 995; }
+
+// with default params
+await waitForCondition(condFn);
+
+// with options
+await waitForCondition(condFn, {
+  waitMs: 300000,
+  intervalMs: 10000
+});
+
+// pass a logger to get extra debug info
+await waitForCondition(condFn, {
+  waitMs: 300000,
+  intervalMs: 10000
+  logger: myLogger // expects a debug method
+});
+```
+
 ### Run the tests
 
 ```

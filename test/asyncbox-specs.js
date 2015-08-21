@@ -3,9 +3,13 @@
 /* global describe:true, it:true */
 let regIt = it;
 import 'mochawait';
-import should from 'should';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { sleep, retry, retryInterval, nodeify, nodeifyAll,
-         parallel, asyncmap, asyncfilter } from '../lib/asyncbox';
+         parallel, asyncmap, asyncfilter, waitForCondition } from '../lib/asyncbox';
+
+chai.use(chaiAsPromised);
+let should = chai.should();
 
 describe('sleep', () => {
   it('should work like setTimeout', async () => {
@@ -234,33 +238,50 @@ describe('parallel', () => {
     }
     should.exist(err);
   });
+
+  describe('waitForCondition', () => {
+    it('should wait and succeed', async () => {
+      let ref = Date.now();
+      function condFn() {
+        return Date.now() - ref > 200;
+      }
+      await waitForCondition(condFn, {waitMs: 1000, intervalMs: 10});
+      let duration = Date.now() - ref;
+      duration.should.be.above(200);
+      duration.should.be.below(250);
+    });
+    it('should wait and fail', async () => {
+      let ref = Date.now();
+      function condFn() {
+        return Date.now() - ref > 200;
+      }
+      await (waitForCondition(condFn, {waitMs: 100, intervalMs: 10}))
+        .should.be.rejectedWith(/Condition unmet/);
+    });
+  });
 });
 
 describe('asyncmap', () => {
   const mapper = async function (el) {
-    await sleep(5);
+    await sleep(10);
     return el * 2;
   };
   const coll = [1, 2, 3];
   it('should map elements one at a time', async () => {
     let start = Date.now();
     (await asyncmap(coll, mapper, false)).should.eql([2, 4, 6]);
-    (Date.now() - start).should.be.above(11);
+    (Date.now() - start).should.be.above(30);
   });
   it('should map elements in parallel', async () => {
     let start = Date.now();
     (await asyncmap(coll, mapper)).should.eql([2, 4, 6]);
-    (Date.now() - start).should.be.below(9);
+    (Date.now() - start).should.be.below(20);
   });
   it('should handle an empty array', async () => {
-    let start = Date.now();
     (await asyncmap([], mapper, false)).should.eql([]);
-    (Date.now() - start).should.be.below(9);
   });
   it('should handle an empty array in parallel', async () => {
-    let start = Date.now();
     (await asyncmap([], mapper)).should.eql([]);
-    (Date.now() - start).should.be.below(9);
   });
 });
 
