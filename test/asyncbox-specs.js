@@ -263,29 +263,25 @@ describe('parallel', () => {
 
 describe('asyncmap', () => {
   const mapper = async function (el) {
-    await sleep(5);
+    await sleep(10);
     return el * 2;
   };
   const coll = [1, 2, 3];
   it('should map elements one at a time', async () => {
     let start = Date.now();
     (await asyncmap(coll, mapper, false)).should.eql([2, 4, 6]);
-    (Date.now() - start).should.be.above(11);
+    (Date.now() - start).should.be.above(30);
   });
   it('should map elements in parallel', async () => {
     let start = Date.now();
     (await asyncmap(coll, mapper)).should.eql([2, 4, 6]);
-    (Date.now() - start).should.be.below(9);
+    (Date.now() - start).should.be.below(20);
   });
   it('should handle an empty array', async () => {
-    let start = Date.now();
     (await asyncmap([], mapper, false)).should.eql([]);
-    (Date.now() - start).should.be.below(9);
   });
   it('should handle an empty array in parallel', async () => {
-    let start = Date.now();
     (await asyncmap([], mapper)).should.eql([]);
-    (Date.now() - start).should.be.below(9);
   });
 });
 
