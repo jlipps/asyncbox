@@ -33,7 +33,9 @@
     "babel-runtime": "=5.8.20",
     "bluebird": "^2.9.34",
     "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
     "es6-mapify": "^1.0.0",
+    "lodash": "^3.10.1",
     "source-map-support": "^0.3.1"
   },
   "scripts": {

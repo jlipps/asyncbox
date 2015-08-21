@@ -4,9 +4,11 @@
 let regIt = it;
 import 'mochawait';
 import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import { sleep, retry, retryInterval, nodeify, nodeifyAll,
-         parallel, asyncmap, asyncfilter } from '../lib/asyncbox';
+         parallel, asyncmap, asyncfilter, waitForCondition } from '../lib/asyncbox';
 
+chai.use(chaiAsPromised);
 let should = chai.should();
 
 describe('sleep', () => {
@@ -235,6 +237,27 @@ describe('parallel', () => {
       err = e;
     }
     should.exist(err);
+  });
+
+  describe('waitForCondition', () => {
+    it('should wait and succeed', async () => {
+      let ref = Date.now();
+      function condFn() {
+        return Date.now() - ref > 200;
+      }
+      await waitForCondition(condFn, {waitMs: 1000, intervalMs: 10});
+      let duration = Date.now() - ref;
+      duration.should.be.above(200);
+      duration.should.be.below(250);
+    });
+    it('should wait and fail', async () => {
+      let ref = Date.now();
+      function condFn() {
+        return Date.now() - ref > 200;
+      }
+      await (waitForCondition(condFn, {waitMs: 100, intervalMs: 10}))
+        .should.be.rejectedWith(/Condition unmet/);
+    });
   });
 });
 
