@@ -8,12 +8,7 @@
   ],
   "version": "2.3.1",
   "author": "jlipps@gmail.com",
-  "licenses": [
-    {
-      "type": "apache-2.0",
-      "url": "https://raw.github.com/jlipps/asyncbox/master/LICENSE"
-    }
-  ],
+  "license": "Apache-2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/jlipps/asyncbox.git"
@@ -30,23 +25,31 @@
     "lib": "./lib"
   },
   "dependencies": {
-    "babel-runtime": "=5.5.5",
+    "babel-runtime": "=5.8.24",
     "bluebird": "^2.9.34",
     "chai": "^3.2.0",
     "chai-as-promised": "^5.1.0",
-    "es6-mapify": "^1.0.0",
-    "lodash": "^3.10.1",
+    "es6-mapify": "^1.1.0",
+    "lodash": "^4.17.4",
     "source-map-support": "^0.3.1"
   },
   "scripts": {
-    "prepublish": "$(npm bin)/gulp prepublish",
-    "test": "$(npm bin)/gulp once",
-    "watch": "$(npm bin)/gulp"
+    "prepublish": "gulp prepublish",
+    "test": "gulp once",
+    "e2e-test": "gulp e2e-test",
+    "build": "gulp transpile",
+    "lint": "gulp eslint",
+    "watch": "gulp watch"
   },
   "devDependencies": {
-    "appium-gulp-plugins": "^1.0.3",
+    "appium-gulp-plugins": "^2.2.0",
+    "eslint": "^3.18.0",
+    "eslint-config-appium": "^2.0.1",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-mocha": "^4.7.0",
+    "eslint-plugin-promise": "^3.3.1",
     "gulp": "^3.8.11",
-    "mochawait": "^2.0.0",
     "request": "^2.47.0",
     "should": "^7.0.4"
   }
