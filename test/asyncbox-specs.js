@@ -85,27 +85,37 @@ describe('retry', function () {
     res.should.equal(9);
     (Date.now() - start).should.be.above(35);
   });
-  it('in sleep mode, should return the correct value with a function that eventually passes', async function () {
-    eventuallyOkFnCalls = 0;
-    let err = null;
-    let start = Date.now();
-    try {
-      await retryInterval(3, 15, eventuallyOkNoSleepFn, 4);
-    } catch (e) {
-      err = e;
-    }
-    should.exist(err);
-    err.message.should.equal('not ok yet');
-    eventuallyOkFnCalls.should.equal(3);
-    (Date.now() - start).should.be.above(30);
+  describe('retryInterval', function () {
+    it('should return the correct value with a function that eventually passes', async function () {
+      eventuallyOkFnCalls = 0;
+      let err = null;
+      let start = Date.now();
+      try {
+        await retryInterval(3, 15, eventuallyOkNoSleepFn, 4);
+      } catch (e) {
+        err = e;
+      }
+      should.exist(err);
+      err.message.should.equal('not ok yet');
+      eventuallyOkFnCalls.should.equal(3);
+      (Date.now() - start).should.be.above(30);
 
-    // rerun with ok number of calls
-    start = Date.now();
-    eventuallyOkFnCalls = 0;
-    let res = await retryInterval(3, 15, eventuallyOkNoSleepFn, 3);
-    eventuallyOkFnCalls.should.equal(3);
-    res.should.equal(9);
-    (Date.now() - start).should.be.above(30);
+      // rerun with ok number of calls
+      start = Date.now();
+      eventuallyOkFnCalls = 0;
+      let res = await retryInterval(3, 15, eventuallyOkNoSleepFn, 3);
+      eventuallyOkFnCalls.should.equal(3);
+      res.should.equal(9);
+      (Date.now() - start).should.be.above(30);
+    });
+    it('should not wait on the final error', async function () {
+      const start = Date.now();
+      try {
+        await retryInterval(3, 2000, badFnCalls);
+      } catch (err) {
+        (Date.now() - start).should.be.below(4100);
+      }
+    });
   });
 });
 
