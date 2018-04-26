@@ -26,10 +26,10 @@
   },
   "dependencies": {
     "babel-runtime": "=5.8.24",
-    "bluebird": "^2.9.34",
+    "bluebird": "^3.5.1",
     "es6-mapify": "^1.1.0",
     "lodash": "^4.17.4",
-    "source-map-support": "^0.3.1"
+    "source-map-support": "^0.5.5"
   },
   "scripts": {
     "prepublish": "gulp prepublish",
@@ -41,8 +41,8 @@
   },
   "devDependencies": {
     "appium-gulp-plugins": "^2.2.0",
-    "chai": "^3.2.0",
-    "chai-as-promised": "^5.1.0",
+    "chai": "4.1.2",
+    "chai-as-promised": "^7.1.1",
     "eslint": "^3.18.0",
     "eslint-config-appium": "^2.0.1",
     "eslint-plugin-babel": "^3.3.0",
@@ -51,6 +51,6 @@
     "eslint-plugin-promise": "^3.3.1",
     "gulp": "^3.8.11",
     "request": "^2.47.0",
-    "should": "^7.0.4"
+    "should": "^13.2.1"
   }
 }

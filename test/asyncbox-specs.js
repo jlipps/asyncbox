@@ -229,21 +229,6 @@ describe('parallel', function () {
     should.exist(err);
     res.should.eql([]);
   });
-  it('should not allow parallelizing bad types of things', async function () {
-    let err;
-    try {
-      await parallel('foo');
-    } catch (e) {
-      err = e;
-    }
-    should.exist(err);
-    try {
-      await parallel([1]);
-    } catch (e) {
-      err = e;
-    }
-    should.exist(err);
-  });
 
   describe('waitForCondition', function () {
     it('should wait and succeed', async function () {
