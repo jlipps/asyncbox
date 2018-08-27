@@ -125,6 +125,9 @@ and waits until the condition is true.
 Throws a `/Condition unmet/` error if the condition has not been
 satisfied within the allocated time.
 
+The condition result is returned if it is not falsy. If the condition
+throws an error then this exception will be immediately passed through.
+
 The default options are: `{ waitMs: 5000, intervalMs: 500 }`
 
 ```js

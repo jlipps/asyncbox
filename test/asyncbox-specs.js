@@ -236,10 +236,11 @@ describe('parallel', function () {
       function condFn () {
         return Date.now() - ref > 200;
       }
-      await waitForCondition(condFn, {waitMs: 1000, intervalMs: 10});
+      const result = await waitForCondition(condFn, {waitMs: 1000, intervalMs: 10});
       let duration = Date.now() - ref;
       duration.should.be.above(200);
       duration.should.be.below(250);
+      isNaN(result).should.be.false;
     });
     it('should wait and fail', async function () {
       let ref = Date.now();
