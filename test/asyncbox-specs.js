@@ -37,7 +37,7 @@ describe('retry', function () {
     }
     return times * times;
   };
-  let eventuallyOkNoSleepFn = async function (times) {
+  let eventuallyOkNoSleepFn = async function (times) { // eslint-disable-line require-await
     eventuallyOkFnCalls++;
     if (eventuallyOkFnCalls < times) {
       throw new Error("not ok yet");
@@ -173,20 +173,20 @@ describe('nodeifyAll', function () {
   });
 });
 
-//describe('nodeifyAll', () => {
-  //let asyncFn = async (val) => {
-    //await sleep(15);
-    //return val;
-  //};
-  //let asyncFn2 = async (val) => {
-    //await sleep(15);
-    //return [val, val + val];
-  //};
-  //let badAsyncFn = async () => {
-    //await sleep(15);
-    //throw new Error('boo');
-  //};
-//});
+// describe('nodeifyAll', () => {
+//   let asyncFn = async (val) => {
+//     await sleep(15);
+//     return val;
+//   };
+//   let asyncFn2 = async (val) => {
+//     await sleep(15);
+//     return [val, val + val];
+//   };
+//   let badAsyncFn = async () => {
+//     await sleep(15);
+//     throw new Error('boo');
+//   };
+// });
 
 describe('parallel', function () {
   let asyncFn = async function (val) {
