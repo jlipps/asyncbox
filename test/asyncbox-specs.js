@@ -26,21 +26,21 @@ describe('retry', function () {
   let badFn = async function () {
     await sleep(15);
     badFnCalls++;
-    throw new Error("bad");
+    throw new Error('bad');
   };
   let eventuallyOkFnCalls = 0;
   let eventuallyOkFn = async function (times) {
     await sleep(15);
     eventuallyOkFnCalls++;
     if (eventuallyOkFnCalls < times) {
-      throw new Error("not ok yet");
+      throw new Error('not ok yet');
     }
     return times * times;
   };
   let eventuallyOkNoSleepFn = async function (times) { // eslint-disable-line require-await
     eventuallyOkFnCalls++;
     if (eventuallyOkFnCalls < times) {
-      throw new Error("not ok yet");
+      throw new Error('not ok yet');
     }
     return times * times;
   };
@@ -195,7 +195,7 @@ describe('parallel', function () {
   };
   let badAsyncFn = async function () {
     await sleep(20);
-    throw new Error("boo");
+    throw new Error('boo');
   };
   it('should perform tasks in parallel and return results', async function () {
     let vals = [1, 2, 3];
