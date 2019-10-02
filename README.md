@@ -123,7 +123,9 @@ Takes a condition (a function returning a boolean or boolean promise),
 and waits until the condition is true.
 
 Throws a `/Condition unmet/` error if the condition has not been
-satisfied within the allocated time.
+satisfied within the allocated time, unless an error is provided in
+the options, as the `error` property, which is either thrown itself, or
+used as the message.
 
 The condition result is returned if it is not falsy. If the condition
 throws an error then this exception will be immediately passed through.
@@ -149,6 +151,25 @@ await waitForCondition(condFn, {
   intervalMs: 10000
   logger: myLogger // expects a debug method
 });
+
+// pass an error string to get that message in the resulting exception
+try {
+  await waitForCondition(condFn, {
+    error: 'Unable to satisfy condition'
+  });
+} catch (err) {
+  // err.message === 'Unable to satisfy condition'
+}
+
+// pass an error instance to be thrown
+const error = new Error('Unable to satisfy condition');
+try {
+  await waitForCondition(condFn, {
+    error: error
+  });
+} catch (err) {
+  // err === error
+}
 ```
 
 ### Run the tests
