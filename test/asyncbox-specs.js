@@ -5,7 +5,7 @@ import { sleep, retry, retryInterval, nodeify, nodeifyAll,
 
 
 chai.use(chaiAsPromised);
-let should = chai.should();
+const should = chai.should();
 
 describe('sleep', function () {
   it('should work like setTimeout', async function () {
@@ -231,24 +231,56 @@ describe('parallel', function () {
   });
 
   describe('waitForCondition', function () {
-    it('should wait and succeed', async function () {
-      let ref = Date.now();
-      function condFn () {
+    function getCondFn () {
+      const ref = Date.now();
+      return function condFn () {
         return Date.now() - ref > 200;
-      }
-      const result = await waitForCondition(condFn, {waitMs: 1000, intervalMs: 10});
+      };
+    }
+    it('should wait and succeed', async function () {
+      const ref = Date.now();
+      const result = await waitForCondition(getCondFn(), {waitMs: 1000, intervalMs: 10});
       let duration = Date.now() - ref;
       duration.should.be.above(200);
       duration.should.be.below(250);
       isNaN(result).should.be.false;
     });
     it('should wait and fail', async function () {
-      let ref = Date.now();
-      function condFn () {
-        return Date.now() - ref > 200;
-      }
-      await (waitForCondition(condFn, {waitMs: 100, intervalMs: 10}))
+      await (waitForCondition(getCondFn(), {waitMs: 100, intervalMs: 10}))
         .should.be.rejectedWith(/Condition unmet/);
+    });
+    it('should wait and fail with custom error message', async function () {
+      let error;
+      try {
+        await waitForCondition(getCondFn(), {
+          waitMs: 100,
+          intervalMs: 10,
+          error: 'Custom message',
+        });
+      } catch (err) {
+        error = err;
+      }
+      should.exist(error);
+      error.should.be.an('error');
+      error.message.should.eql('Custom message');
+    });
+    it('should wait and fail with custom error', async function () {
+      function CustomError (message) {
+        this.message = message;
+        this[Symbol.toStringTag] = 'CustomError';
+      }
+      let error;
+      try {
+        await waitForCondition(getCondFn(), {
+          waitMs: 100,
+          intervalMs: 10,
+          error: new CustomError('Custom message'),
+        });
+      } catch (err) {
+        error = err;
+      }
+      should.exist(error);
+      error.should.be.a('CustomError');
     });
   });
 });
