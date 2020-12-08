@@ -23,6 +23,20 @@ async function myFn () {
 };
 ```
 
+### Long Sleep
+
+Sometimes `Promise.delay` or `setTimeout` are inaccurate for large wait times. To safely wait for these long times (e.g. in the 5+ minute range), you can use `longSleep`:
+
+```js
+import { longSleep } from 'asyncbox';
+
+async function myFn () {
+  await longSleep(10 * 60 * 1000); // wait for 10 mins
+  await longSleep(5000, {thresholdMs: 10000}); // wait for 5s. Anything below the thresholdMs will use a single sleep
+  await longSleep(5000, {intervalMs: 500}); // check the clock every 500ms to see if waiting should stop
+}
+```
+
 ### Retry
 
 An async/await way of running a method until it doesn't throw an error

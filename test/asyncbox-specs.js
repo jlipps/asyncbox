@@ -1,6 +1,6 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
-import { sleep, retry, retryInterval, nodeify, nodeifyAll,
+import { sleep, longSleep, retry, retryInterval, nodeify, nodeifyAll,
          parallel, asyncmap, asyncfilter, waitForCondition } from '../lib/asyncbox';
 
 
@@ -12,6 +12,19 @@ describe('sleep', function () {
     let now = Date.now();
     await sleep(20);
     (Date.now() - now).should.be.above(19);
+  });
+});
+
+describe('longSleep', function () {
+  it('should work like sleep with values less than threshold', async function () {
+    const now = Date.now();
+    await longSleep(20, {thresholdMs: 100});
+    (Date.now() - now).should.be.above(19);
+  });
+  it('should work like sleep with values above threshold, but quantized', async function () {
+    const now = Date.now();
+    await longSleep(50, {thresholdMs: 20, intervalMs: 40});
+    (Date.now() - now).should.be.above(79);
   });
 });
 
