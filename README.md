@@ -37,6 +37,15 @@ async function myFn () {
 }
 ```
 
+You can also pass a `progressCb` option which is a callback function that receives an object with the properties `elapsedMs`, `timeLeft`, and `progress`. This will be called on every wait interval so you can do your wait logging or whatever.
+
+```js
+function progressCb({elapsedMs, timeLeft, progress}) {
+  console.log(`We are {progress * 100}% complete waiting`);
+}
+await longSleep(10 * 60 * 1000, {progressCb});
+```
+
 ### Retry
 
 An async/await way of running a method until it doesn't throw an error

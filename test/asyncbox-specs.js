@@ -31,6 +31,28 @@ describe('longSleep', function () {
     await longSleep(50, {thresholdMs: 20, intervalMs: 40});
     (Date.now() - now).should.be.above(79);
   });
+  it('should trigger a progress callback if specified', async function () {
+    let callCount = 0;
+    let curElapsed = 0;
+    let curTimeLeft = 10000;
+    let curProgress = 0;
+    const progressCb = function ({elapsedMs, timeLeft, progress}) {
+      elapsedMs.should.be.above(curElapsed);
+      timeLeft.should.be.below(curTimeLeft);
+      progress.should.be.above(curProgress);
+      curElapsed = elapsedMs;
+      curTimeLeft = timeLeft;
+      curProgress = progress;
+      callCount += 1;
+    };
+    const now = Date.now();
+    await longSleep(500, {thresholdMs: 1, intervalMs: 100, progressCb});
+    (Date.now() - now).should.be.above(49);
+    callCount.should.be.above(3);
+    (curProgress >= 1).should.be.true;
+    (curTimeLeft <= 0).should.be.true;
+    (curElapsed >= 50).should.be.true;
+  });
 });
 
 describe('retry', function () {
