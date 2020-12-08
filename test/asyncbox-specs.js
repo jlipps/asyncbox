@@ -16,6 +16,11 @@ describe('sleep', function () {
 });
 
 describe('longSleep', function () {
+  it('should work like sleep in general', async function () {
+    let now = Date.now();
+    await longSleep(20);
+    (Date.now() - now).should.be.above(19);
+  });
   it('should work like sleep with values less than threshold', async function () {
     const now = Date.now();
     await longSleep(20, {thresholdMs: 100});
