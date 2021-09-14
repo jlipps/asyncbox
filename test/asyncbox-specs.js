@@ -2,6 +2,8 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import { sleep, longSleep, retry, retryInterval, nodeify, nodeifyAll,
          parallel, asyncmap, asyncfilter, waitForCondition } from '../lib/asyncbox';
+import B from 'bluebird';
+import sinon from 'sinon';
 
 
 chai.use(chaiAsPromised);
@@ -271,6 +273,13 @@ describe('parallel', function () {
   });
 
   describe('waitForCondition', function () {
+    let requestSpy;
+    beforeEach(function () {
+      requestSpy = sinon.spy(B, 'delay');
+    });
+    afterEach(function () {
+      B.delay.restore();
+    });
     it('should wait and succeed', async function () {
       let ref = Date.now();
       function condFn () {
@@ -289,6 +298,15 @@ describe('parallel', function () {
       }
       await (waitForCondition(condFn, {waitMs: 100, intervalMs: 10}))
         .should.be.rejectedWith(/Condition unmet/);
+    });
+    it('should not exceed implicit wait timeout', async function () {
+      let ref = Date.now();
+      function condFn () {
+        return Date.now() - ref > 15;
+      }
+      await (waitForCondition(condFn, {waitMs: 20, intervalMs: 10}));
+      let getLastCall = requestSpy.getCall(1);
+      getLastCall.args[0].should.be.below(10);
     });
   });
 });
