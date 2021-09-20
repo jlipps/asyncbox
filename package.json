@@ -33,7 +33,6 @@
     "bluebird": "^3.5.1",
     "es6-mapify": "^1.1.0",
     "lodash": "^4.17.4",
-    "sinon": "^11.1.2",
     "source-map-support": "^0.5.5"
   },
   "scripts": {
@@ -53,6 +52,7 @@
     "eslint-config-appium": "^4.0.0",
     "gulp": "^4.0.0",
     "request": "^2.47.0",
-    "should": "^13.2.1"
+    "should": "^13.2.1",
+    "sinon": "^11.1.2",
   }
 }
