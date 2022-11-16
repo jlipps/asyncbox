@@ -16,9 +16,9 @@
   "bugs": {
     "url": "https://github.com/jlipps/asyncbox/issues"
   },
-  "engines": [
-    "node"
-  ],
+  "engines": {
+    "node": ">=10"
+  },
   "main": "./build/lib/asyncbox.js",
   "bin": {},
   "directories": {
@@ -31,20 +31,21 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "bluebird": "^3.5.1",
-    "es6-mapify": "^1.1.0",
     "lodash": "^4.17.4",
-    "source-map-support": "^0.5.5"
+    "source-map-support": "^0.5.5",
+    "@types/bluebird": "^3.5.37"
   },
   "scripts": {
     "clean": "rm -rf node_modules && rm -f package-lock.json && npm install",
-    "prepare": "gulp prepublish",
+    "prepare": "gulp prepublish && tsc",
     "test": "gulp once",
     "e2e-test": "gulp e2e-test",
-    "build": "gulp transpile",
+    "build": "gulp transpile && tsc",
     "lint": "gulp eslint",
     "watch": "gulp watch"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.189",
     "ajv": "^6.5.3",
     "appium-gulp-plugins": "^4.0.0",
     "chai": "4.2.0",
@@ -53,6 +54,8 @@
     "gulp": "^4.0.0",
     "request": "^2.47.0",
     "should": "^13.2.1",
-    "sinon": "^11.1.2"
-  }
+    "sinon": "^11.1.2",
+    "typescript": "^4.7.0"
+  },
+  "types": "./build/lib/asyncbox.d.ts"
 }
