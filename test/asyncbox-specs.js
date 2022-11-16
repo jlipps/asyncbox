@@ -148,6 +148,7 @@ describe('retry', function () {
       let res = await retryInterval(3, 15, eventuallyOkNoSleepFn, 3);
       eventuallyOkFnCalls.should.equal(3);
       res.should.equal(9);
+      // XXX: flaky
       (Date.now() - start).should.be.above(30);
     });
     it('should not wait on the final error', async function () {
