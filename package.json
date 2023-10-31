@@ -17,7 +17,7 @@
     "url": "https://github.com/jlipps/asyncbox/issues"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=16"
   },
   "main": "./build/lib/asyncbox.js",
   "bin": {},
@@ -29,33 +29,41 @@
     "build/lib/**/*"
   ],
   "dependencies": {
-    "@babel/runtime": "^7.0.0",
     "bluebird": "^3.5.1",
     "lodash": "^4.17.4",
-    "source-map-support": "^0.5.5",
-    "@types/bluebird": "^3.5.37"
+    "source-map-support": "^0.x"
   },
   "scripts": {
-    "clean": "rm -rf node_modules && rm -f package-lock.json && npm install",
-    "prepare": "gulp prepublish && tsc",
-    "test": "gulp once",
-    "e2e-test": "gulp e2e-test",
-    "build": "gulp transpile && tsc",
-    "lint": "gulp eslint",
-    "watch": "gulp watch"
+    "build": "tsc -b",
+    "clean": "npm run build -- --clean",
+    "rebuild": "npm run clean; npm run build",
+    "dev": "npm run build -- --watch",
+    "prepare": "npm run rebuild",
+    "test": "mocha --exit --timeout 1m \"./test/**/*-specs.js\"",
+    "lint": "eslint .",
+    "watch": "npm run dev"
   },
   "devDependencies": {
+    "@appium/eslint-config-appium": "^8.0.4",
+    "@appium/eslint-config-appium-ts": "^0.x",
+    "@appium/tsconfig": "^0.x",
+    "@types/bluebird": "^3.5.37",
     "@types/lodash": "^4.14.189",
-    "ajv": "^6.5.3",
-    "appium-gulp-plugins": "^4.0.0",
-    "chai": "4.2.0",
+    "@types/node": "^20.4.7",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "eslint-config-appium": "^4.0.0",
-    "gulp": "^4.0.0",
-    "request": "^2.47.0",
-    "should": "^13.2.1",
-    "sinon": "^11.1.2",
-    "typescript": "~4.7.0"
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-import-resolver-typescript": "^3.5.5",
+    "eslint-plugin-import": "^2.28.0",
+    "eslint-plugin-mocha": "^10.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "mocha": "^10.0.0",
+    "sinon": "^16.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
   },
   "types": "./build/lib/asyncbox.d.ts"
 }
