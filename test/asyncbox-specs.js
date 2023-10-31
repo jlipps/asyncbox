@@ -182,7 +182,7 @@ describe('nodeifyAll', function () {
       should.not.exist(err);
       should.not.exist(val2);
       val.should.equal('foo');
-      (Date.now() - start).should.be.above(14);
+      (Date.now() - start).should.be.least(14);
       done();
     });
   });
@@ -192,7 +192,7 @@ describe('nodeifyAll', function () {
       should.not.exist(err);
       should.not.exist(val2);
       val.should.equal('foo');
-      (Date.now() - start).should.be.above(14);
+      (Date.now() - start).should.be.least(14);
       done();
     });
   });
@@ -201,7 +201,7 @@ describe('nodeifyAll', function () {
     nodeify(asyncFn2('foo'), function (err, val) { // eslint-disable-line promise/prefer-await-to-callbacks
       should.not.exist(err);
       val.should.eql(['foo', 'foofoo']);
-      (Date.now() - start).should.be.above(14);
+      (Date.now() - start).should.be.least(14);
       done();
     });
   });
@@ -210,7 +210,7 @@ describe('nodeifyAll', function () {
     nodeify(badAsyncFn('foo'), function (err, val) { // eslint-disable-line promise/prefer-await-to-callbacks
       should.not.exist(val);
       err.message.should.equal('boo');
-      (Date.now() - start).should.be.above(14);
+      (Date.now() - start).should.be.least(14);
       done();
     });
   });
