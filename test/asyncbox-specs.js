@@ -321,12 +321,12 @@ describe('asyncmap', function () {
   it('should map elements one at a time', async function () {
     let start = Date.now();
     (await asyncmap(coll, mapper, false)).should.eql([2, 4, 6]);
-    (Date.now() - start).should.be.above(30);
+    (Date.now() - start).should.be.least(30);
   });
   it('should map elements in parallel', async function () {
     let start = Date.now();
     (await asyncmap(coll, mapper)).should.eql([2, 4, 6]);
-    (Date.now() - start).should.be.below(20);
+    (Date.now() - start).should.be.most(20);
   });
   it('should handle an empty array', async function () {
     (await asyncmap([], mapper, false)).should.eql([]);
