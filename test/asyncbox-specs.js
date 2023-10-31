@@ -149,7 +149,7 @@ describe('retry', function () {
       eventuallyOkFnCalls.should.equal(3);
       res.should.equal(9);
       // XXX: flaky
-      (Date.now() - start).should.be.above(30);
+      (Date.now() - start).should.be.least(30);
     });
     it('should not wait on the final error', async function () {
       const start = Date.now();
@@ -182,7 +182,7 @@ describe('nodeifyAll', function () {
       should.not.exist(err);
       should.not.exist(val2);
       val.should.equal('foo');
-      (Date.now() - start).should.be.above(14);
+      (Date.now() - start).should.be.least(14);
       done();
     });
   });
@@ -192,7 +192,7 @@ describe('nodeifyAll', function () {
       should.not.exist(err);
       should.not.exist(val2);
       val.should.equal('foo');
-      (Date.now() - start).should.be.above(14);
+      (Date.now() - start).should.be.least(14);
       done();
     });
   });
@@ -201,7 +201,7 @@ describe('nodeifyAll', function () {
     nodeify(asyncFn2('foo'), function (err, val) { // eslint-disable-line promise/prefer-await-to-callbacks
       should.not.exist(err);
       val.should.eql(['foo', 'foofoo']);
-      (Date.now() - start).should.be.above(14);
+      (Date.now() - start).should.be.least(14);
       done();
     });
   });
@@ -210,7 +210,7 @@ describe('nodeifyAll', function () {
     nodeify(badAsyncFn('foo'), function (err, val) { // eslint-disable-line promise/prefer-await-to-callbacks
       should.not.exist(val);
       err.message.should.equal('boo');
-      (Date.now() - start).should.be.above(14);
+      (Date.now() - start).should.be.least(14);
       done();
     });
   });
@@ -307,7 +307,7 @@ describe('parallel', function () {
       }
       await (waitForCondition(condFn, {waitMs: 20, intervalMs: 10}));
       let getLastCall = requestSpy.getCall(1);
-      getLastCall.args[0].should.be.below(10);
+      getLastCall.args[0].should.be.most(10);
     });
   });
 });
@@ -321,12 +321,12 @@ describe('asyncmap', function () {
   it('should map elements one at a time', async function () {
     let start = Date.now();
     (await asyncmap(coll, mapper, false)).should.eql([2, 4, 6]);
-    (Date.now() - start).should.be.above(30);
+    (Date.now() - start).should.be.least(30);
   });
   it('should map elements in parallel', async function () {
     let start = Date.now();
     (await asyncmap(coll, mapper)).should.eql([2, 4, 6]);
-    (Date.now() - start).should.be.below(20);
+    (Date.now() - start).should.be.most(20);
   });
   it('should handle an empty array', async function () {
     (await asyncmap([], mapper, false)).should.eql([]);
