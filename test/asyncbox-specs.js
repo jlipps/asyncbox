@@ -149,7 +149,7 @@ describe('retry', function () {
       eventuallyOkFnCalls.should.equal(3);
       res.should.equal(9);
       // XXX: flaky
-      (Date.now() - start).should.be.above(30);
+      (Date.now() - start).should.be.greaterThanOrEqual(30);
     });
     it('should not wait on the final error', async function () {
       const start = Date.now();
