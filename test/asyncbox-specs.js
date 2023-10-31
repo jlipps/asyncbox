@@ -149,7 +149,7 @@ describe('retry', function () {
       eventuallyOkFnCalls.should.equal(3);
       res.should.equal(9);
       // XXX: flaky
-      (Date.now() - start).should.be.greaterThanOrEqual(30);
+      (Date.now() - start).should.be.least(30);
     });
     it('should not wait on the final error', async function () {
       const start = Date.now();
@@ -307,7 +307,7 @@ describe('parallel', function () {
       }
       await (waitForCondition(condFn, {waitMs: 20, intervalMs: 10}));
       let getLastCall = requestSpy.getCall(1);
-      getLastCall.args[0].should.be.below(10);
+      getLastCall.args[0].should.be.most(10);
     });
   });
 });
